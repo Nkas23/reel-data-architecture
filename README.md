@@ -26,28 +26,17 @@ delivers business KPIs through a **Power BI** dashboard.
 ---
 
 ## Architecture Overview
-Source (Supabase/PostgreSQL)
-│
-▼
-┌─────────────┐
-│   BRONZE    │  Raw ingestion — exact copy of source tables
-│   LAYER     │  Python extraction scripts → Snowflake
-└──────┬──────┘
-│
-▼
-┌─────────────┐
-│   SILVER    │  Cleaned, typed, validated, business rules applied
-│   LAYER     │  dbt models — deduplication, standardization
-└──────┬──────┘
-│
-▼
-┌─────────────┐
-│    GOLD     │  Aggregated, analytics-ready tables
-│   LAYER     │  dbt models — KPIs, retention, revenue, species
-└──────┬──────┘
-│
-▼
-Power BI Dashboard — Reel Business KPIs
+
+| Layer | Description |
+|---|---|
+| **Source** | Supabase / PostgreSQL — operational Reel app database |
+| **Bronze** | Raw ingestion — exact copy of source tables via Python |
+| **Silver** | Cleaned, typed, validated — dbt transformation models |
+| **Gold** | Aggregated KPI-ready tables — dbt aggregation models |
+| **Dashboard** | Power BI — Reel business metrics and executive KPIs |
+
+> Data flows top to bottom: Source → Bronze → Silver → Gold → Dashboard
+
 ---
 
 ## Technology Stack
@@ -65,28 +54,18 @@ Power BI Dashboard — Reel Business KPIs
 ---
 
 ## Repository Structure
-reel-data-architecture/
-│
-├── 📁 database/
-│   └── schema.sql              # Full PostgreSQL schema (8 tables)
-│
-├── 📁 docs/
-│   ├── architecture_overview.md  # Detailed architecture decisions
-│   └── data_dictionary.md        # Every table and column defined
-│
-├── 📁 seed_data/
-│   └── generate_seed_data.py   # Synthetic data generator (500+ records)
-│
-├── 📁 bronze/
-│   └── load_to_snowflake.py    # Python ingestion: Supabase → Snowflake
-│
-├── 📁 dbt_reel/
-│   ├── dbt_project.yml         # dbt project configuration
-│   ├── models/silver/          # 7 silver cleaning models
-│   └── models/gold/            # 5 gold aggregation models
-│
-└── 📁 dashboard/
-└── reel_kpi_dashboard.pbix # Power BI dashboard file
+
+| Folder | File | Description |
+|---|---|---|
+| `database/` | `schema.sql` | Full PostgreSQL schema — 8 tables |
+| `docs/` | `architecture_overview.md` | Detailed architecture decisions |
+| `docs/` | `data_dictionary.md` | Every table and column defined |
+| `seed_data/` | `generate_seed_data.py` | Synthetic data generator — 500+ records |
+| `bronze/` | `load_to_snowflake.py` | Python ingestion: Supabase → Snowflake |
+| `dbt_reel/` | `dbt_project.yml` | dbt project configuration |
+| `dbt_reel/` | `models/silver/` | 7 silver cleaning models |
+| `dbt_reel/` | `models/gold/` | 5 gold aggregation models |
+| `dashboard/` | `reel_kpi_dashboard.pbix` | Power BI dashboard file |
 ---
 
 ## The Reel App — Business Context
