@@ -37,7 +37,5 @@ models:
   reel_data_architecture:
     silver:
       +materialized: view
-      +schema: SILVER
     gold:
       +materialized: table
-      +schema: GOLD
