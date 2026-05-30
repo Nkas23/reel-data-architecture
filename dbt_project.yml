@@ -1,0 +1,45 @@
+
+# =============================================================
+# Reel App — dbt Project Configuration
+# Author: Nicolas Gonzalez
+# Description: Configures the dbt project for the Reel app
+#              Medallion architecture pipeline.
+#              Silver models materialize as views (fast, no storage cost)
+#              Gold models materialize as tables (pre-aggregated for Power BI)
+# =============================================================
+
+name: 'reel_data_architecture'
+version: '1.0.0'
+config-version: 2
+
+profile: 'default'
+
+# File path configurations
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# =============================================================
+# MODEL CONFIGURATIONS
+# Silver = views (always fresh, no storage cost)
+# Gold = tables (pre-computed for fast dashboard queries)
+# =============================================================
+
+models:
+  reel_data_architecture:
+    silver:
+      +materialized: view
+      +database: REEL_DB
+      +schema: SILVER
+    gold:
+      +materialized: table
+      +database: REEL_DB
+      +schema: GOLD
